@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暖心话语弹窗</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        :root {
+            --primary-color: #7ed321;        /* 淡绿色主色调 */
+            --primary-hover: #68b11a;       /* 淡绿色悬停色 */
+            --secondary-color: #4caf50;     /* 淡绿色辅助色 */
+            --secondary-hover: #3d8b40;     /* 淡绿色辅助悬停色 */
+            --heart-color: rgba(126, 211, 33, 0.5); /* 淡绿色爱心透明度 */
+            --popup-border: #a5d6a7;       /* 弹窗边框淡绿色 */
+        }
+        body {
+            background: #ffffff;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .control-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        .toggle-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .toggle-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary-hover);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .toggle-btn:active {
+            transform: scale(0.95);
+        }
+        .toggle-btn.paused {
+            background: var(--secondary-color);
+        }
+        .toggle-btn.paused:hover {
+            background: var(--secondary-hover);
+        }
+        .heart-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .heart {
+            position: absolute;
+            color: var(--heart-color);
+            font-size: 20px;
+            animation: float 8s linear infinite;
+            opacity: 0;
+        }
+        .popup-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        .popup {
+            position: absolute;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 300px;
+            text-align: center;
+            animation: popupAppear 0.5s forwards;
+            pointer-events: auto;
+            cursor: pointer;
+            transform-origin: center;
+            border: 2px solid var(--popup-border);
+        }
+        .popup:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        .popup i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        .popup p {
+            color: #555;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        @keyframes popupAppear {
+            0% {
+                transform: scale(0.5) translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        @media (max-width: 768px) {
+            .control-icon {
+                top: 15px;
+                right: 15px;
+            }
+            .toggle-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-container" id="hearts"></div>
+    <div class="control-icon">
+        <button class="toggle-btn" id="toggleBtn" title="暂停弹窗">
+            <i class="fas fa-pause"></i>
+        </button>
+    </div>
+    <div class="popup-container" id="popupContainer"></div>
+    <script>
+        // 颜色控制函数 - 只需修改这里的值即可改变整个页面的颜色主题
+        function setColorTheme() {
+            const theme = {
+                primary: '#7ed321',        // 淡绿色主色调
+                primaryHover: '#68b11a',   // 淡绿色悬停色
+                secondary: '#4caf50',      // 淡绿色辅助色
+                secondaryHover: '#3d8b40', // 淡绿色辅助悬停色
+                heart: 'rgba(126, 211, 33, 0.5)', // 淡绿色爱心透明度
+                popupBorder: '#a5d6a7'     // 弹窗边框淡绿色
+            };
+            // 应用颜色主题到CSS变量
+            document.documentElement.style.setProperty('--primary-color', theme.primary);
+            document.documentElement.style.setProperty('--primary-hover', theme.primaryHover);
+            document.documentElement.style.setProperty('--secondary-color', theme.secondary);
+            document.documentElement.style.setProperty('--secondary-hover', theme.secondaryHover);
+            document.documentElement.style.setProperty('--heart-color', theme.heart);
+            document.documentElement.style.setProperty('--popup-border', theme.popupBorder);
+            return theme;
+        }
+        // 暖心话语库
+        const warmMessages = [
+            "你今天做得很好！",
+            "你值得所有的爱与幸福",
+            "相信自己，你能做到任何事",
+            "你的微笑照亮了世界",
+            "你独一无二，无可替代",
+            "每一天都是新的开始",
+            "你比自己想象的更坚强",
+            "世界因你而美好",
+            "你正在成为最好的自己",
+            "深呼吸，一切都会好起来",
+            "你有足够的力量面对挑战",
+            "你的存在本身就是一份礼物",
+            "小小的进步也是进步",
+            "你拥有改变世界的力量",
+            "爱你的人永远在你身边",
+            "你今天的努力会有回报",
+            "保持善良，世界会回报你",
+            "你比昨天更优秀",
+            "困难只是暂时的",
+            "你值得被温柔以待",
+            "你的内心充满阳光",
+            "你正在创造美好的未来",
+            "给自己一点掌声",
+            "你拥有无限可能",
+            "你值得所有美好的事物"
+        ];
+        // 图标库
+        const icons = [
+            "fa-heart", "fa-star", "fa-sun", "fa-cloud", "fa-feather",
+            "fa-dove", "fa-smile", "fa-laugh", "fa-lightbulb", "fa-seedling"
+        ];
+        const popupContainer = document.getElementById('popupContainer');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const toggleIcon = toggleBtn.querySelector('i');
+        const heartsContainer = document.getElementById('hearts');
+        let popupInterval;
+        let isPopping = false; // 初始状态为false，确保能开始弹窗
+        // 创建漂浮的心形
+        function createHearts() {
+            const heartCount = 30;
+            for (let i = 0; i < heartCount; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '<i class="fas fa-heart"></i>';
+                    heart.classList.add('heart');
+                    // 随机位置
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                    heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                    heart.style.animationDelay = Math.random() * 5 + 's';
+                    heartsContainer.appendChild(heart);
+                    // 动画结束后移除元素
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 15000);
+                }, i * 500);
+            }
+        }
+        // 创建弹窗
+        function createPopup() {
+            const popup = document.createElement('div');
+            popup.classList.add('popup');
+            // 随机位置
+            const x = Math.random() * (window.innerWidth - 300);
+            const y = Math.random() * (window.innerHeight - 200);
+            popup.style.left = x + 'px';
+            popup.style.top = y + 'px';
+            // 随机选择消息和图标
+            const message = warmMessages[Math.floor(Math.random() * warmMessages.length)];
+            const icon = icons[Math.floor(Math.random() * icons.length)];
+            popup.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <p>${message}</p>
+            `;
+            // 点击关闭弹窗
+            popup.addEventListener('click', () => {
+                popup.style.animation = 'popupAppear 0.5s reverse';
+                setTimeout(() => {
+                    popup.remove();
+                }, 500);
+            });
+            popupContainer.appendChild(popup);
+        }
+        // 开始弹窗
+        function startPopups() {
+            if (isPopping) return;
+            isPopping = true;
+            // 更新按钮状态
+            toggleBtn.classList.remove('paused');
+            toggleIcon.className = 'fas fa-pause';
+            toggleBtn.title = '暂停弹窗';
+            // 先立即弹出几个
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createPopup, i * 200);
+            }
+            // 设置定时器持续弹出
+            popupInterval = setInterval(() => {
+                createPopup();
+            }, 500);
+        }
+        // 暂停弹窗
+        function pausePopups() {
+            isPopping = false;
+            clearInterval(popupInterval);
+            // 更新按钮状态
+            toggleBtn.classList.add('paused');
+            toggleIcon.className = 'fas fa-play';
+            toggleBtn.title = '开始弹窗';
+        }
+        // 切换弹窗状态
+        function togglePopups() {
+            if (isPopping) {
+                pausePopups();
+            } else {
+                startPopups();
+            }
+        }
+        // 事件监听
+        toggleBtn.addEventListener('click', togglePopups);
+        // 初始化 - 页面加载后立即开始弹窗
+        window.addEventListener('load', () => {
+            // 设置颜色主题
+            setColorTheme();
+            createHearts();
+            // 立即开始弹窗，无需等待
+            startPopups();
+        });
+    </script>
+</body>
+</html>
+
