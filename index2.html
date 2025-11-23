@@ -1,191 +1,191 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>温馨祝福 v3.1 (秘密版)</title>
-    <style>
+﻿<！doctype html>
+<超文本标记语言 朗="zh-CN">
+<头>
+    <元 字符集="UTF-8">
+    <元 姓名="视口" 内容="宽度=设备宽度，初始比例=1.0">
+    <标题>温馨祝福v3.1</标题>
+    <风格>
         /* --- 基础样式 --- */
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            transition: background-color 0.5s;
+        身体,超文本标记语言 {
+            边缘:0;填充:0;宽度:100%;高度:100%;
+            溢出:隐藏的;
+            字体系列:-apple-系统,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,无衬线;
+            过渡:背景色 0.5s;
         }
 
         /* --- 主题配色 --- */
-        body { background-color: #f4f4f9; }
-        body.theme-warm { background-color: #fff8e1; }
-        body.theme-cool { background-color: #e3f2fd; }
-        body.theme-dark { background-color: #333; }
-        body.theme-green { background-color: #e8f5e9; }
+        身体 { 背景色：#f4f4f9；}
+        身体.暖主题 { 背景色：#fff8e1；}
+        身体.主题-酷 { 背景色：#e3f2fd；}
+        身体.主题-深色 { 背景色: #333;}
+        身体.主题-绿色 { 背景色：#e8f5e9；}
 
         /* --- 卡片通用样式 --- */
-        .floating-card {
-            position: absolute; z-index: 1;
-            animation: fadeInOut 4s ease-in-out forwards; 
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border: 3px solid #ddd; 
+.浮动卡 {
+            位置:绝对的;Z指数:1;
+            动画:fadeInOut 4s 易进易出 向前;
+            边界半径:8PX;
+            箱形阴影:0 4PX 12PX RGBA(0,0,0,0.08);
+            边境:3PX 固体#ddd；
         }
 
-        /* --- 话语卡片样式 --- */
-        .message-card {
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.95);
-            white-space: nowrap;
+        /* --- 卡片样式 --- */
+.信息卡 {
+            填充:12PX 20PX;
+            背景:RGBA(255,255,255,0.95);
+            空白:noWrap;
         }
 
         /* --- 图片卡片样式 --- */
-        .image-card {
-            padding: 0;
-            background: #fff;
-            max-width: 250px;
-            max-height: 250px;
-            overflow: hidden;
+.图像卡片 {
+            填充:0;
+            背景：#fff；
+            最大宽度:250PX;
+            最大高度:250PX;
+            溢出:隐藏的;
         }
-        .image-card img {
-            display: block; width: 100%; height: 100%;
-            max-width: 250px; max-height: 250px;
-            object-fit: cover;
-            border-radius: 6px;
+.图像卡片 IMG {
+            显示:块;宽度:100%;高度:100%;
+            最大宽度:250PX;最大高度:250PX;
+            对象拟合:覆盖;
+            边界半径:6PX;
         }
 
         /* --- 主题卡片颜色 (同步边框) --- */
-        body .message-card { border-color: #ddd; }
-        body .image-card { border-color: #ccc; }
-        body.theme-warm .message-card { background: #fffbeb; border-color: #ffe57f; color: #6d4c00; }
-        body.theme-warm .image-card { border-color: #ffe57f; }
-        body.theme-cool .message-card { background: #eef8ff; border-color: #90caf9; color: #0d47a1; }
-        body.theme-cool .image-card { border-color: #90caf9; }
-        body.theme-dark .message-card { background: #424242; border-color: #616161; color: #eee; }
-        body.theme-dark .image-card { border-color: #616161; }
-        body.theme-green .message-card { background: #f1f8e9; border-color: #a5d6a7; color: #1b5e20; }
-        body.theme-green .image-card { border-color: #a5d6a7; }
+        身体.信息卡 { 边框颜色：#ddd；}
+        身体.图像卡片 { 边框颜色：#ccc；}
+        身体.暖主题.信息卡 { 背景：#fffbeb；边框颜色：#ffe57f；颜色：#6d4c00；}
+        身体.暖主题.图像卡片 { 边框颜色：#ffe57f；}
+        身体.主题-酷.信息卡 { 背景：#eef8ff；边框颜色：#90caf9；颜色：#0d47a1；}
+        身体.主题-酷.图像卡片 { 边框颜色：#90caf9；}
+        身体.主题-深色.信息卡 { 背景: #424242;边框颜色: #616161;颜色：#eee；}
+        身体.主题-深色.图像卡片 { 边框颜色: #616161;}
+        身体.主题-绿色.信息卡 { 背景：#f1f8e9；边框颜色：#a5d6a7；颜色：#1b5e20；}
+        身体.主题-绿色.图像卡片 { 边框颜色：#a5d6a7；}
 
         /* 卡片动画 */
         @keyframes fadeInOut {
-            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
-            25% { opacity: 1; transform: scale(1) translateY(0); }
-            75% { opacity: 1; transform: scale(1) translateY(0); }
-            100% { opacity: 0; transform: scale(0.9) translateY(-10px); }
-        }
+0%{不透明度：0；改变：规模(0.8)translateY(20px)；}
+25%{不透明度：1；改变：规模(1)translateY(0)；}
+75%{不透明度：1；改变：规模(1)translateY(0)；}
+100%{不透明度：0；改变：规模(0.9)translateY(-10px)；}
+}
 
-        /* --- 控制栏 (悬停样式) --- */
-        .controls {
-            position: fixed; top: 0; right: 0; padding: 20px;
-            z-index: 1000; display: flex; gap: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .controls:hover,
-        .controls.force-visible { opacity: 1; }
-        .control-button {
-            padding: 10px 18px; font-size: 16px;
-            background-color: #fff; color: #333;
-            border: 1px solid #ccc; border-radius: 8px;
-            cursor: pointer; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+/* --- 控制栏 (悬停) --- */
+.控制 {
+位置：固定；顶部：0；右侧：0；填充：20px；
+Z索引：1000；显示：柔度；间隙：10px；
+不透明度：0；
+过渡：不透明度0.3s易进易出；
+}
+.控件：悬停，
+.controls.force-visible{opacity:1；}
+.控制按钮{
+填充：10px18px；字体大小：16px；
+背景色：#fff；颜色：#333；
+边框：1px实体#ccc；边框半径：8px；
+cursor：指针；box-shadow:02px5px rgba(0，0，0，0.1)；
+}
 
-        /* --- 菜单面板 --- */
-        .menu-panel {
-            position: fixed; top: 70px; right: 20px; width: 300px;
-            background: #fff; border: 1px solid #ccc;
-            border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            padding: 0 20px 20px 20px;
-            z-index: 999; box-sizing: border-box;
-            display: none;
-            max-height: calc(100vh - 100px);
-            overflow-y: auto;
-        }
-        .menu-panel.visible { display: block; }
+/* --- 菜单 --- */
+.menu-panel{
+位置：固定；顶部：70px；右侧：20px；宽度：300px；
+背景：#fff；边框：1px实心#ccc；
+边界半径：8px；盒阴影：06px20px rgba(0，0，0，0.2)；
+填充：020px20px20px；
+Z索引：999；框大小：边框框；
+显示：无；
+最大高度：calc(100vh-100px)；
+overflow-y：自动；
+}
+.menu-panel.visible{display:block；}
         
-        .menu-section {
-            margin-top: 20px; padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        .menu-section:first-child {
-             margin-top: 20px; padding-top: 0; border-top: none;
-        }
-        .menu-section h3 { margin-top: 0; margin-bottom: 15px; }
-        .menu-section.hidden { display: none; } /* 隐藏彩蛋 */
+.menu-节{
+页边距顶部：20px；页边距顶部：20px；
+border-top:1px实体#eee；
+}
+.menu-节：第一个子项{
+上边距：20px；上边距：0；上边框：无；
+}
+.menu-section h3{margin-top:0；margin-bottom:15px；}
+.menu-区段。隐藏{display:none；}/*彩蛋*/
 
-        /* 菜单 - 主题选择 */
-        .theme-selector {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 8px; margin-bottom: 20px;
-        }
-        .theme-button {
-            padding: 8px 12px; border: 1px solid #ddd;
-            border-radius: 6px; cursor: pointer;
-            background: #f9f9f9; font-size: 14px; text-align: center;
-        }
-        /* 主题按钮点击后的高亮 */
-        .theme-button.clicked {
-            background: #cce7ff;
-            border-color: #007bff;
-        }
+/* 菜单 - 主题选择 */
+.theme-selector{
+显示：网格；网格-模板-列：重复(3，1fr)；
+间隙：8px；底边距：20px；
+}
+.主题按钮{
+填充：8px12px；边框：1px实心#ddd；
+边框半径：6px；光标：指针；
+背景：#f9f9f9；字体大小：14px；文本对齐：居中；
+}
+/* 主题按钮点击后的高亮 */
+.theme-button.clicked{
+背景：#cce7ff；
+边框颜色：#007bff；
+}
 
-        /* 菜单 - 设置项 */
-        .setting-item {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 12px;
-        }
-        .setting-item label { font-size: 14px; color: #333; }
-        .setting-item input[type="number"],
-        .setting-item select {
-            width: 90px; padding: 5px 8px; border: 1px solid #ccc;
-            border-radius: 4px; font-size: 14px; box-sizing: border-box;
-        }
-        .setting-note {
-            font-size: 12px; color: #666; 
-            margin-top: -10px; margin-bottom: 15px;
-        }
+/* 菜单 - 设置项 */
+.设置-项目{
+显示：柔度；对齐内容：间距；
+对齐项：居中；下边距：12px；
+}
+.设置项标签{font-size:14px；color：#333；}
+.设置项输入[type="number"]，
+.设置-项目选择{
+宽度：90px；填充：5px8px；边框：1px实心#ccc；
+边框半径：4px；字体大小：14px；框大小：边框框；
+}
+.setting-note{
+font-size:12px；color：#666；
+上边距：-10px；下边距：15px；
+.
 
-        /* 菜单 - 话语编辑 */
-        #phrases-input {
-            width: 100%; height: 150px; box-sizing: border-box; 
-            border: 1px solid #ccc; border-radius: 6px;
-            padding: 10px; font-size: 14px; line-height: 1.5;
-            resize: vertical; 
-        }
+/* 菜单 - 话语编辑 */
+#短语输入{
+宽度：100%；高度：150px；框大小：边框框；
+边框：1px实体#ccc；边框半径：6px；
+填充：10px；字体大小：14px；行高：1.5；
+调整大小：垂直；
+}
 
-        /* 菜单 - 按钮 */
-        #save-button {
-            width: 100%; padding: 12px; font-size: 16px;
-            background-color: #007bff; color: white;
-            border: none; border-radius: 6px;
-            cursor: pointer; margin-top: 15px;
-        }
-    </style>
-</head>
-<body>
+/* 菜单 - 按钮 */
+#save-button{
+宽度：100%；填充：12px；字体大小：16px；
+背景色：#007bff；颜色：白色；
+边框：无；边框半径：6px；
+光标：指针；上边距：15px；
+.
+paddingstyle>
+</头>
+<身体>
 
-    <div class="controls">
-        <button id="pause-button" class="control-button">暂停</button>
-        <button id="menu-button" class="control-button">菜单</button>
-    </div>
+overflowdiv：隐藏；"controls">
+}button id="pause-button"class="control-button">暂停</按钮>
+.图像卡按钮img={class="control-button">菜单</按钮>
+displaydiv>
 
-    <div id="menu-panel" class="menu-panel">
+object-fitdiv：封面；"menu-panel"class="menu-panel">
         
-        <div class="menu-section">
-            <h3>🎨 切换主题</h3>
-            <div class="theme-selector">
-                <button class="theme-button" data-theme="default">默认</button>
-                <button class="theme-button" data-theme="warm">温暖</button>
-                <button class="theme-button" data-theme="cool">清凉</button>
-                <button class="theme-button" data-theme="dark">深色</button>
-                <button class="theme-button" data-theme="green">绿色</button>
-            </div>
-        </div>
+}div class="menu-section">
+            <H3>🎨  切换主题</H3>
+/*---主题卡片颜色(同步边框)---*/div class="主题选择器">
+bodybutton.message-card={border-color：#ddd；}>默认</按钮>
+bodybutton.image-card={border-color：#ccc；}>温暖</按钮>
+bodybutton.theme-warm.message-card{=background>：#fffbeb；border-colorbutton>
+bodybutton.theme-warm.image-card{=border-color>：#ffe57f；}button>
+bodybutton.theme-cool.Message-card{=background>：#eef8ff；border-colorbutton>
+bodydiv>
+bodydiv>
 
-        <div class="menu-section">
-            <h3>⚙️ 效果设置</h3>
-            <div class="setting-item">
-                <label for="speed-input">生成速度 (毫秒)</label>
-                <input type="number" id="speed-input" min="100" step="100">
+bodydiv.theme-green.message-card>
+<H3>            <H3>⚙️  效果设置</H3></H3>
+            <div 班级="设置项目">
+                <标签 为="速度输入">生成速度 (毫秒)</标签>
+                <输入 类型="数字" 身份标识="速度输入" 最小值="100" 步="100">
             </div>
-            <p class="setting-note">(建议 100-2000 之间，越小越快)</p>
+            <p 班级="设置注释">(建议 100-2000 之间，越小越快)</p>
             <div class="setting-item">
                 <label for="duration-input">消失时间 (毫秒)</label>
                 <input type="number" id="duration-input" min="1000" step="500">
@@ -472,3 +472,4 @@
     </script>
 </body>
 </html>
+
